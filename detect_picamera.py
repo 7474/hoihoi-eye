@@ -31,8 +31,10 @@ import picamera
 
 from PIL import Image
 # tflite_runtimeでなく tensorflow をインストールしたのでそちらを使う
-#from tflite_runtime.interpreter import Interpreter
+# from tflite_runtime.interpreter import Interpreter
 import tensorflow as tf
+
+import wiringpi
 
 CAMERA_WIDTH = 240
 CAMERA_HEIGHT = 240
@@ -127,6 +129,27 @@ def main():
   interpreter.allocate_tensors()
   _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
+  keys = {
+    'tl': 4,
+    'press': 9,
+    'tr': 15,
+    'x': 16,
+    'up': 21,
+    'right': 22,
+    'left': 23,
+    'start': 24,
+    'select': 25,
+    'y': 26,
+    'down': 27,
+    'b': 28,
+    'a': 29
+  }
+  wiringpi.wiringPiSetup()
+
+  for key in keys:
+    wiringpi.pinMode(keys[key], wiringpi.GPIO.INPUT)
+    wiringpi.pullUpDnControl(keys[key], wiringpi.GPIO.PUD_UP)
+
   with picamera.PiCamera(
       resolution=(CAMERA_WIDTH, CAMERA_HEIGHT),framerate=30) as camera:
     # 上下逆に組み込んでいる
@@ -151,6 +174,9 @@ def main():
 
         stream.seek(0)
         stream.truncate()
+
+        if wiringpi.digitalRead(keys['start']) == 0:
+          print('press start to break')
 
     finally:
       camera.stop_preview()
