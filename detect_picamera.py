@@ -30,7 +30,9 @@ import numpy as np
 import picamera
 
 from PIL import Image
-from tflite_runtime.interpreter import Interpreter
+# tflite_runtimeでなく tensorflow をインストールしたのでそちらを使う
+#from tflite_runtime.interpreter import Interpreter
+import tensorflow as tf
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
@@ -120,7 +122,7 @@ def main():
   args = parser.parse_args()
 
   labels = load_labels(args.labels)
-  interpreter = Interpreter(args.model)
+  interpreter = tf.lite.Interpreter(args.model)
   interpreter.allocate_tensors()
   _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
