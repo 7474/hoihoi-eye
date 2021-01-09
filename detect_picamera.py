@@ -34,8 +34,8 @@ from PIL import Image
 #from tflite_runtime.interpreter import Interpreter
 import tensorflow as tf
 
-CAMERA_WIDTH = 640
-CAMERA_HEIGHT = 480
+CAMERA_WIDTH = 240
+CAMERA_HEIGHT = 240
 
 
 def load_labels(path):
@@ -102,7 +102,8 @@ def annotate_objects(annotator, results, labels):
 
     # Overlay the box, label, and score on the camera preview
     annotator.bounding_box([xmin, ymin, xmax, ymax])
-    annotator.text([xmin, ymin],
+    # 横だけ少しずらしておく
+    annotator.text([xmin+4, ymin],
                    '%s\n%.2f' % (labels[obj['class_id']], obj['score']))
 
 

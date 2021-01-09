@@ -30,6 +30,7 @@ from __future__ import print_function
 
 from PIL import Image
 from PIL import ImageDraw
+from PIL import ImageFont
 
 
 def _round_up(value, n):
@@ -78,7 +79,11 @@ class Annotator:
     self._buffer = Image.new('RGBA', self._buffer_dims)
     self._overlay = None
     self._draw = ImageDraw.Draw(self._buffer)
-    self._default_color = default_color or (0xFF, 0, 0, 0xFF)
+    self._default_color = default_color or (0, 0xFF, 0, 0xFF)
+    # XXX 引数にする
+    font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc'
+    font_size = 16
+    self._font = ImageFont.truetype(font_path, font_size)
 
   def update(self):
     """Draws any changes to the image buffer onto the overlay."""
@@ -110,7 +115,7 @@ class Annotator:
         which will *not* cover up drawings under the region).
     """
     outline = outline or self._default_color
-    self._draw.rectangle(rect, fill=fill, outline=outline)
+    self._draw.rectangle(rect, fill=fill, outline=outline, width=2)
 
   def text(self, location, text, color=None):
     """Draws the given text at the given location.
@@ -122,4 +127,4 @@ class Annotator:
         default_color).
     """
     color = color or self._default_color
-    self._draw.text(location, text, fill=color)
+    self._draw.text(location, text, fill=color, font=self._font)

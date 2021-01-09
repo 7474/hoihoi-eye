@@ -9,7 +9,28 @@
 - カメラ
     - [YMaxラズベリーパイゼロ用広角カメラモジュール](https://www.amazon.co.jp/gp/product/B083GRBLP5/)
 - ディスプレイ
-    - [論理解像度480x480のもの](http://www.spotpear.com/index/product/detail/id/70.html)
+    - [物理解像度240x240、論理解像度480x480のもの](http://www.spotpear.com/index/product/detail/id/70.html)
+- ホイホイさん
+    - [ホイホイさん NEW EDITION](https://www.kotobukiya.co.jp/product/product-0000003489)
+
+## 依存関係
+
+```sh
+wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_armv6l.whl
+pip3 install tensorflow-2.4.0-cp37-none-linux_armv6l.whl
+sudo apt install fonts-noto-cjk
+```
+
+## 実行
+
+```sh
+# 学習済モデルのダウンロード
+bash download.sh /tmp
+# ダウンロードしたモデルを指定して実行
+python3 detect_picamera.py \
+  --model /tmp/detect.tflite \
+  --labels /tmp/coco_labels.txt
+```
 
 ## Thanks
 
