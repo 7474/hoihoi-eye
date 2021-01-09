@@ -128,7 +128,9 @@ def main():
   _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
   with picamera.PiCamera(
-      resolution=(CAMERA_WIDTH, CAMERA_HEIGHT), framerate=30) as camera:
+      resolution=(CAMERA_WIDTH, CAMERA_HEIGHT),framerate=30) as camera:
+    # 上下逆に組み込んでいる
+    camera.rotation = 180
     camera.start_preview()
     try:
       stream = io.BytesIO()
