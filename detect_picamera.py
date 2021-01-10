@@ -177,6 +177,7 @@ def main():
 
         if wiringpi.digitalRead(keys['start']) == 0:
           print('press start to break')
+          break
 
     finally:
       camera.stop_preview()
