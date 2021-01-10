@@ -103,10 +103,10 @@ def annotate_objects(annotator, results, labels):
     ymax = int(ymax * CAMERA_HEIGHT)
 
     # Overlay the box, label, and score on the camera preview
-    annotator.bounding_box([xmin, ymin, xmax, ymax])
-    # 横だけ少しずらしておく
-    annotator.text([xmin+4, ymin],
-                   '%s\n%.2f' % (labels[obj['class_id']], obj['score']))
+    # annotator.bounding_box([xmin, ymin, xmax, ymax])
+    annotator.target_site([xmin, ymin, xmax, ymax])
+    annotator.text([xmin, ymin + max((ymax - ymin) * 0.9, 32)],
+                   '(%s:%.2f)' % (labels[obj['class_id']], obj['score']))
 
 
 def main():

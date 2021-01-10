@@ -103,6 +103,7 @@ class Annotator:
     """Clears the contents of the overlay, leaving only the plain background."""
     self._draw.rectangle((0, 0) + self._dims, fill=(0, 0, 0, 0x00))
 
+
   def bounding_box(self, rect, outline=None, fill=None):
     """Draws a bounding box around the specified rectangle.
 
@@ -116,6 +117,28 @@ class Annotator:
     """
     outline = outline or self._default_color
     self._draw.rectangle(rect, fill=fill, outline=outline, width=2)
+
+  def target_site(self, rect, color=None):
+    """Draws a target site.
+
+    Args:
+      rect: (x1, y1, x2, y2) rectangle to be drawn, where (x1, y1) and (x2, y2)
+        are opposite corners of the desired rectangle.
+      color: PIL.ImageColor with which to draw the outline (defaults to the
+        Annotator default_color).
+    """
+    xmin, ymin, xmax, ymax = rect
+    center = [xmin + (xmax - xmin) / 2, ymin + (ymax - ymin) / 2]
+    short_side = min(abs(xmax - xmin), abs(ymax - ymin))
+    r = max(short_side * 0.4, 16)
+    color = color or self._default_color
+    self._draw.line([center[0], center[1] - 6, center[0], center[1] + 6], width=4, fill=color)
+    self._draw.line([center[0] - 8, center[1], center[0] + 8, center[1]], width=4, fill=color)
+    # 短辺の正方形に外接する円でカッコ囲いする
+    self._draw.arc([center[0] - r, center[1] - r, center[0] + r, center[1] + r], start=125, end=235, width=4, fill=color)
+    self._draw.arc([center[0] - r, center[1] - r, center[0] + r, center[1] + r], start=-65, end=65, width=4, fill=color)
+    # 円の外周から短辺の正方形の左下に髭を伸ばす
+    self._draw.line([center[0] - r * 0.7071, center[1] + r * 0.7071, center[0] - r, center[1] + r], width=4, fill=color)
 
   def text(self, location, text, color=None):
     """Draws the given text at the given location.
